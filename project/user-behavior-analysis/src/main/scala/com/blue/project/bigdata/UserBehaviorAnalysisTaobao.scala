@@ -8,7 +8,7 @@ object UserBehaviorAnalysisTaobao {
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
     Logger.getLogger("org.apache.spark.sql").setLevel(Level.WARN)
-    val sparkConf = new SparkConf().setAppName(getClass().getName())
+    val sparkConf = new SparkConf().setAppName(getClass().getName()).setMaster("local[*]")
     val sparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
     val sparkContext = sparkSession.sparkContext
     import sparkSession.implicits._
