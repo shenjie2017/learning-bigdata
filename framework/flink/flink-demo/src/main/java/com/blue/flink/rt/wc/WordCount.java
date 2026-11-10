@@ -13,10 +13,10 @@ import org.apache.flink.util.Collector;
 public class WordCount {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
-        conf.setString(RestOptions.BIND_PORT,"8081");
-        conf.setString(RestOptions.BIND_ADDRESS,"0.0.0.0");
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(conf);
-        env.setParallelism(3);
+        env.setParallelism(2);
+
+        env.enableCheckpointing(5000L);
         DataStreamSource<String> localhost = env.socketTextStream("localhost", 9999);
         SingleOutputStreamOperator<Tuple2<String, Integer>> result = localhost.flatMap(new FlatMapFunction<String, Tuple2<String, Integer>>() {
             @Override
@@ -36,6 +36,6 @@ public class WordCount {
             }
         }).sum(1);
         result.print("result: ");
-        env.execute("word count realtime execute");
+        env.execute(WordCount.class.getName());
     }
 }

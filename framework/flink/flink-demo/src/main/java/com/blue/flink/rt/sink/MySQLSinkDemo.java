@@ -35,6 +35,7 @@ public class MySQLSinkDemo {
         SingleOutputStreamOperator<Event> eventDS = kafkaDS.map(new MapFunction<String, Event>() {
             @Override
             public Event map(String value) throws Exception {
+                System.out.println(value);
                 return JsonUtil.fromJsonString(value,Event.class);
             }
         });
@@ -57,7 +58,8 @@ public class MySQLSinkDemo {
                         .build(),
                 new JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
                         .withUrl("jdbc:mysql://127.0.0.1:3306/bigdata")
-                        .withDriverName("com.mysql.jdbc.Driver")
+//                        .withDriverName("com.mysql.jdbc.Driver")
+                        .withDriverName("com.mysql.cj.jdbc.Driver")
                         .withUsername("root")
                         .withPassword("123456")
                         .build()
